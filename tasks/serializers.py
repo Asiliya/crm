@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from .models import Task
+from django.utils import timezone
 
 class TaskSerializer(serializers.ModelSerializer):
     created_by = serializers.ReadOnlyField(source="created_by.username")
@@ -16,3 +17,8 @@ class TaskSerializer(serializers.ModelSerializer):
         request = self.context.get("request")
         validated_data["created_by"] = request.user
         return super().create(validated_data)
+
+    def validate_deadline(self, value):
+        if value and value <= timezone.now():
+            raise serializers.ValidationError("Крайній термін має бути у майбутньому.")
+        return value

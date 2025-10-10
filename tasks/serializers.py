@@ -7,7 +7,10 @@ class TaskSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = Task
-        fields = ["id", "title", "description", "created_at", "updated_at", "created_by", "assigned_to"]
+        fields = [
+            "id", "title", "description", "created_at", "updated_at",
+            "deadline", "status", "created_by", "assigned_to"
+        ]
 
     def create(self, validated_data):
         request = self.context.get("request")

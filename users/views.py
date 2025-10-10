@@ -4,6 +4,7 @@ from rest_framework.views import APIView
 from rest_framework import status
 from django.contrib.auth import get_user_model
 
+from rest_framework.parsers import MultiPartParser, FormParser
 from .permissions import IsOwnerOrAdminDelete
 from .serializers import UserSerializer, ChangePasswordSerializer
 
@@ -13,6 +14,7 @@ User = get_user_model()
 class UserListCreateView(generics.ListCreateAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    parser_classes = (MultiPartParser, FormParser)
     def get_permissions(self):
         if self.request.method == "POST":
             return [permissions.AllowAny()]
@@ -23,6 +25,7 @@ class UserListCreateView(generics.ListCreateAPIView):
 class UserDetailView(generics.RetrieveUpdateDestroyAPIView):
     queryset = User.objects.all()
     serializer_class = UserSerializer
+    parser_classes = (MultiPartParser, FormParser)
     permission_classes = [permissions.IsAuthenticated, IsOwnerOrAdminDelete]
 
 

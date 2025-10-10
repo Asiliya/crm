@@ -1,6 +1,7 @@
 from rest_framework import generics, permissions
 from rest_framework.exceptions import ValidationError
 from .models import Comment
+from .permissions import IsOwnerOrReadOnly
 from .serializers import CommentSerializer
 from tasks.models import Task
 
@@ -29,7 +30,7 @@ class CommentListCreateView(generics.ListCreateAPIView):
 
 class CommentDetailView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = CommentSerializer
-    permission_classes = [permissions.IsAuthenticated]
+    permission_classes = [permissions.IsAuthenticated, IsOwnerOrReadOnly]
 
     def get_queryset(self):
         # guard для swagger/schema-gen
